@@ -19,5 +19,4 @@ jobs:
         commit-message: '[Auto] New feature'
         base: development
         title: '[Auto] New feature'
-        body: |
-          This is an automatically generated pull request for the new feature branch.
+        body: "This pull request is for the feature branch."
