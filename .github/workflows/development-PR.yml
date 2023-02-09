@@ -17,7 +17,7 @@ jobs:
       uses: peter-evans/create-pull-request@v3
       with:
         commit-message: '[Auto] New feature'
-        branch: development
+        branch: ${{ env.BRANCH }}
         title: '[Auto] New feature'
         body: |
           This is an automatically generated pull request for the new feature branch.
