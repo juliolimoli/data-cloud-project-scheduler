@@ -1,22 +1,18 @@
-name: Create Pull Request
-
-on:
-  push:
-    branches:
-      - feature/*
-
-jobs:
-  create_pull_request:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Create Pull Request
-      uses: peter-evans/create-pull-request@v4
-      with:
-        base: development
-        head: ${{github.ref}}
-        title: "Feature Branch Pull Request"
-        body: "This pull request is for the feature branch."
+- name: Opens Pull Request
+  uses: devops-infra/action-pull-request@v0.5.3
+  with:
+    github_token: ${{ secrets.GITHUB_TOKEN }}
+    source_branch: ${{ github.ref }}
+    target_branch: development
+    title: My pull request
+    template: .github/PULL_REQUEST_TEMPLATE.md
+    body: "**Automated pull request**"
+    reviewer: juliolimoli
+    assignee: juliolimoli
+    label: enhancement
+    milestone: My milestone
+    draft: true
+    old_string: "<!-- Add your description here -->"
+    new_string: "** Automatic pull request**"
+    get_diff: true
+    allow_no_diff: false
