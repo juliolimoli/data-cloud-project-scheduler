@@ -20,7 +20,6 @@ jobs:
       uses: peter-evans/create-pull-request@v4
       with:
         base: development
-        head: FEATURE_BRANCH
         branch: FEATURE_BRANCH
         title: "Feature Branch Pull Request"
         body: "This pull request is for the feature branch."
