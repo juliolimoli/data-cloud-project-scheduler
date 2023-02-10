@@ -5,6 +5,9 @@ on:
     branches:
       - feature/*
 
+env:
+  FEATURE_BRANCH: ${{github.ref}}
+
 jobs:
   create_pull_request:
     runs-on: ubuntu-latest
@@ -17,6 +20,7 @@ jobs:
       uses: peter-evans/create-pull-request@v4
       with:
         base: development
-        head: ${{github.head_ref}}
+        head: FEATURE_BRANCH
+        branch: FEATURE_BRANCH
         title: "Feature Branch Pull Request"
         body: "This pull request is for the feature branch."
