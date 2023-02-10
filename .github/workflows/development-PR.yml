@@ -1,9 +1,9 @@
-name: Open Pull Request for Feature Branch
+name: Create Pull Request
 
 on:
   push:
     branches:
-      - feature/**
+      - feature/*
 
 jobs:
   create_pull_request:
@@ -16,8 +16,7 @@ jobs:
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v4
       with:
-        commit-message: 'Creating pull request for development'
-        title: '[Auto] New feature'
-        body: "This pull request is for the development branch."
-        branch: "development"
-        
+        base: development
+        head: ${{github.head_ref}}
+        title: "Feature Branch Pull Request"
+        body: "This pull request is for the feature branch."
