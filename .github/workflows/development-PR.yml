@@ -12,14 +12,12 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
-      with:
-        ref: development
 
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v4
       with:
         commit-message: 'Creating pull request for development'
-        branch: development
         title: '[Auto] New feature'
         body: "This pull request is for the development branch."
+        branch: "development"
         
