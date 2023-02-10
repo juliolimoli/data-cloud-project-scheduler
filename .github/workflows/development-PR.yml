@@ -17,6 +17,6 @@ jobs:
       uses: peter-evans/create-pull-request@v4
       with:
         base: development
-        branch: ${{github.ref}}
+        head: ${{github.ref}}
         title: "Feature Branch Pull Request"
         body: "This pull request is for the feature branch."
