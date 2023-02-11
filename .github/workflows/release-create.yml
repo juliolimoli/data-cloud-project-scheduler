@@ -1,0 +1,21 @@
+name: Create Release Branch
+
+on:
+  push:
+    branches:
+      - development
+
+jobs:
+  create-release-branch:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Create release branch
+      run: |
+        VERSION=$(grep -oP '(?<=<version>).*(?=</version>)' version.xml)
+        BRANCH_NAME="release/$VERSION"
+        git checkout -b $BRANCH_NAME
+        git push origin $BRANCH_NAME
