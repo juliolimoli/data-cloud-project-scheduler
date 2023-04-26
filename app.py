@@ -82,26 +82,27 @@ def lambda_handler(event, context):
         for point in range(1, number_of_points+1)
         ]
     events_to_nearby = [
-        (event_datetime.strftime('%Y-%m-%d %H:%M:%S'), coordinate)
+        [event_datetime.strftime('%Y-%m-%d %H:%M:%S'), coordinate]
         for event_datetime, coordinate in zip(events_datetime, coordinates)
         ]
 
     # send the events to EventBridge and then to the nearby lambda
     event_bridge_client = boto3.client('events')
 
-    # Convert the event data to JSON
-    event_data_json = json.dumps(events_to_nearby)
-
-    for event in event_data_json:
+    for evt in events_to_nearby:
+        # Include the evt (datetime and coordinate)
+        event['coordinate'] = evt[1]
         # Define the parameters for the PutEvents operation
         put_events_params = {
             'Entries': [
-                {
+                    {
                     'Source': context.function_name,
                     'Target': "data-cloud-project-gmaps-nearby",
-                    'Detail': event
+                    'Time': evt[0],
+                    'Detail': json.dumps(event)
                 }
             ]
         }
         # Send the event to EventBridge
         response = event_bridge_client.put_events(**put_events_params)
+        print(response)
