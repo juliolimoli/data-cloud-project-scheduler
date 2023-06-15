@@ -7,8 +7,8 @@ def set_coordinates(event):
 
     # Define the initial variables
     central_coordinate = (event["latitude"], event["longitude"])
-    radius = event["radius"]
-    number_of_points = event["points"]
+    radius = float(event["radius"])
+    number_of_points = int(event["points"])
 
     # Initial variables for iteration that setup all coordinates
     angles = [315, 225, 135, 45]
@@ -23,6 +23,7 @@ def set_coordinates(event):
     distance_to_add = gpd.distance(meters=(2*radius))
     coordinate = distance_to_add.destination(central_coordinate, bearing=90)
     coordinates.append((coordinate.latitude, coordinate.longitude))
+    print(distance_to_add)
 
     while point<number_of_points:
         print(point, point_in_turn, turn)
@@ -69,8 +70,8 @@ def set_coordinates(event):
 
 def create_events_month(event, coordinates):
 
-    number_of_points = event["points"]
-    days = event["days"]
+    number_of_points = int(event["points"])
+    days = int(event["days"])
 
     # distribute all the event along the days
     minutes_in_given_days = days*24*60
@@ -91,31 +92,62 @@ def create_events_month(event, coordinates):
     
     return distributed_events_for_nearby
 
-def lambda_handler(event, context):
+def create_schedule_rule(events_client, evt, radius):
+    # Setting variables
+    schedule_time = evt[0].replace(
+        " ", ""
+        ).replace(
+            ":", "", 2
+            ).replace(
+                "-", "", 2
+                )
+    rule_name = "nearby_rule"+str(schedule_time)
+    region = "sa-east-1"
+    acc_id = "820949372807"
+    function_name = "data-cloud-project-maps-nearby"
+    function_arn = f"arn:aws:lambda:{region}:{acc_id}:function:{function_name}"
+    datetime_object = datetime.strptime(evt[0], '%Y-%m-%d %H:%M:%S')
+    minutes = str(datetime_object.minute).zfill(2)
+    hour = str(datetime_object.hour).zfill(2)
+    day = str(datetime_object.day).zfill(2)
+    month = str(datetime_object.month).zfill(2)
+    year = str(datetime_object.year)
+    cron_expression = f"at({year}-{month}-{day}T{hour}:{minutes}:00)"
+    event_for_nearby = {
+        "coordinate": evt[1],
+        "radius": radius
+    }
+    print(schedule_time, rule_name, cron_expression)
 
+    # Create the rule with a one-time schedule
+    role_name = "data-cloud-project-maps-nearby-role-r57024ap"
+    response = events_client.create_schedule(
+        Name=rule_name,
+        ScheduleExpression=cron_expression,
+        State='ENABLED',
+        ScheduleExpressionTimezone="Europe/Brussels",
+        FlexibleTimeWindow={
+            'Mode': 'OFF'
+        },
+        Target={
+            "Arn": function_arn,
+            "Input": event_for_nearby,
+            "RoleArn": f"arn:aws:iam::{acc_id}:role/service-role/{role_name}"
+        }
+    )
+    return response
+
+def lambda_handler(event, context):
+    radius = float(event["radius"])
+    event_bridge_client = boto3.client('scheduler')
     coordinates = set_coordinates(event)
     distributed_events_for_nearby = create_events_month(event, coordinates)
 
-    # send the events to EventBridge and then to the nearby lambda
-    event_bridge_client = boto3.client('events')
-
+    # create rule in event bridge for each coordinate
     for evt in distributed_events_for_nearby:
-        # Include the evt (datetime and coordinate)
-        event_for_nearby = {
-            'timestamp': evt[0],
-            'coordinate': evt[1]
-        }
-        # Define the parameters for the PutEvents operation
-        put_events_params = {
-            'Entries': [
-                    {
-                    'Source': context.function_name,
-                    'Target': "data-cloud-project-gmaps-nearby",
-                    'Time': evt[0],
-                    'Detail': json.dumps(event_for_nearby)
-                }
-            ]
-        }
-        # Send the event to EventBridge
-        response = event_bridge_client.put_events(**put_events_params)
-        print(response)
+        print("Creating rule:", evt)
+        response = create_schedule_rule(
+            event_bridge_client, 
+            evt,
+            radius)
+        print("Schedule Arn:", response)
