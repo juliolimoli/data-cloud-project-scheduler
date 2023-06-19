@@ -4,7 +4,7 @@ on:
     branches:
       - feature/*
 permissions:
-  contents: write
+  pull-requests: write
 jobs:
   open-pull-request:
     runs-on: ubuntu-latest
@@ -12,13 +12,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v4
+      - name: Open Pull Request
+        uses: peter-evans/create-pull-request@v3
         with:
-            commit-message: Cloud - Update available list
-            title: Cloud - Update available list
-            body: Cloud - Update available list
-            base: development
-            labels: automated-pr, Clouds & Regions
-            branch: temporary
-            delete-branch: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: development  # Replace with your specific branch name
+          title: Automatically Open Pull Request
+          body: |
+            This is an automatically opened pull request triggered by a push to the main branch.
+          labels: auto-open-pr
