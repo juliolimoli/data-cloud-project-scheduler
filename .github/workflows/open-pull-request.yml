@@ -23,4 +23,3 @@ jobs:
             This pull request is automatically generated after pushing to the feature branch.
             
           branch: development
-          branch-suffix: feature/*
