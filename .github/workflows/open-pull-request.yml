@@ -20,3 +20,5 @@ jobs:
             body: Cloud - Update available list
             base: development
             labels: automated-pr, Clouds & Regions
+            branch: temporary
+            delete-branch: true
