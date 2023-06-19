@@ -12,15 +12,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Open Pull Request
-        uses: peter-evans/create-pull-request@v3
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: Automatically opened pull request
-          title: Pull Request Title
-          body: |
-            Pull Request Description
-            
-            This pull request is automatically generated after pushing to the feature branch.
-            
-          branch: development
+            commit-message: Cloud - Update available list
+            title: Cloud - Update available list
+            body: Cloud - Update available list
+            base: development
+            labels: automated-pr, Clouds & Regions
+            branch: feature/*
