@@ -3,12 +3,10 @@ on:
   push:
     branches:
       - 'feature/**'
-permissions: read-all
 jobs:
   open-pull-request:
-    permissions:
-      pull-requests: write
     runs-on: ubuntu-latest
+    permissions: write-all
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
