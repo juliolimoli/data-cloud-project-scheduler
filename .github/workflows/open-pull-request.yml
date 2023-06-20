@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - 'feature/**'
-permissions: write-all
+permissions: read-all
 jobs:
   open-pull-request:
     permissions:
