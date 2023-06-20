@@ -10,14 +10,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Open Pull Request
-        uses: peter-evans/create-pull-request@v3
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
         with:
+          branch: feature/gha_workflows
           base: development
           token: ${{ secrets.GITHUB_TOKEN }}
-          title: Automatically Open Pull Request
+          title: "Open Pull Request from feature to development"
           body: |
             This is an automatically opened pull request triggered by a push to the main branch.
           labels: auto-open-pr
