@@ -3,10 +3,11 @@ on:
   push:
     branches:
       - 'feature/**'
-permissions:
-  pull-requests: write
+permissions: read-all|write-all
 jobs:
   open-pull-request:
+    permissions:
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
