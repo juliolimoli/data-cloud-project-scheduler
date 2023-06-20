@@ -2,7 +2,7 @@ name: Open Pull Request
 on:
   push:
     branches:
-      - feature/*
+      - '**'
 permissions:
   pull-requests: write
 jobs:
@@ -12,12 +12,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Determine branch name
+        id: branch
+        run: echo "::set-output name=branch_name::${{ github.ref }}"
+
       - name: Create Pull Request
+        if: startsWith(steps.branch.outputs.branch_name, 'feature/')
         uses: peter-evans/create-pull-request@v3
         with:
-          branch: feature/gha_workflows
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ steps.branch.outputs.branch_name }}
           base: development
-          token: ${{ secrets.GHA }}
           title: "Open Pull Request from feature to development"
           body: |
             This is an automatically opened pull request triggered by a push to the main branch.
