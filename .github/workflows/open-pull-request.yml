@@ -15,7 +15,6 @@ jobs:
       - name: Open Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
-          branch: development  # Replace with your specific branch name
           base: development
           token: ${{ secrets.GITHUB_TOKEN }}
           title: Automatically Open Pull Request
