@@ -24,7 +24,7 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
-          token: ${{ secrets.GHA }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           branch: feature/gha_workflows
           base: development
           title: "Open Pull Request from feature to development"
