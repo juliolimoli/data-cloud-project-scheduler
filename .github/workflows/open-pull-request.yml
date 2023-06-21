@@ -23,4 +23,5 @@ jobs:
             
             This pull request is automatically generated after pushing to the feature branch.
             
-          branch: development
+          base: development
+          delete-branch: true
