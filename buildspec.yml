@@ -6,14 +6,13 @@ phases:
       python: 3.11
   build:
     commands:
-      - echo "Build started on `date`"
-      - echo "pip install -r requirements.txt -t . (bypass)"
-      - zip -r lambda.zip *
-artifacts:
-  files:
-    - lambda.zip
-post_build:
-  commands:
-    - echo "Updating lambda Function..."
-    - aws lambda update-function-code --function-name data-cloud-project-maps-scheduler --zip-file fileb://lambda.zip
-    - echo "DONE!!"
+      - echo "Zipping deployment package..."
+      - cd lib
+      - zip -r9 ../deployment_package.zip .
+      - cd ..
+      - zip -g deployment_package.zip lambda_function.py
+  post_build:
+    commands:
+      - echo "Updating lambda Function..."
+      - aws lambda update-function-code --function-name data-cloud-project-maps-scheduler --zip-file fileb://deployment_package.zip
+      - echo "DONE!!"
