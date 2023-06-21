@@ -1,0 +1,19 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.10
+  build:
+    commands:
+      - echo "Build started on `date`"
+      - echo "pip install -r requirements.txt -t . (bypass)"
+      - zip -r lambda.zip *
+artifacts:
+  files:
+    - lambda.zip
+post_build:
+  commands:
+    - echo "Updating lambda Function..."
+    - aws lambda update-function-code --function-name data-cloud-project-maps-scheduler --zip-file fileb://lambda.zip
+    - echo "DONE!!"
