@@ -18,7 +18,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
-          title: "Merge feature branch to development"
+          title: "Merge feature branch to development (require PR before)"
           body: |
             This pull request aims to merge the feature branch into the development branch.
 
