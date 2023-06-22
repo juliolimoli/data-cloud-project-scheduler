@@ -1,27 +1,28 @@
 name: Open Pull Request
 on:
   push:
-    branches:
-      - feature/*
-permissions:
-  contents: write
+    branches: 
+      - 'feature/**'
 jobs:
-  open-pull-request:
+  open_pull_request:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
+      - name: Check out repository
         uses: actions/checkout@v2
+
+      # Install dependencies or perform any necessary setup steps here
 
       - name: Open Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: Automatically opened pull request
-          title: Pull Request Title
+          branch: ${{ github.ref }}
+          title: "Merge feature branch to development"
           body: |
-            Pull Request Description
-            
-            This pull request is automatically generated after pushing to the feature branch.
-            
+            This pull request aims to merge the feature branch into the development branch.
+
+            Please review and merge if approved.
           base: development
-          delete-branch: true
+          draft: false
+      
