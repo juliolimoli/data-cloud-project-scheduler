@@ -23,7 +23,7 @@ jobs:
             This pull request aims to merge the feature branch into the development branch.
 
             Please review and merge if approved.
-            require PR before, codeowners
+            require PR before, codeowners, branch development blocked
           base: development
           draft: false
       
