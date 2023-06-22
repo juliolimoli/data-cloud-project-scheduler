@@ -12,6 +12,10 @@ jobs:
     - name: Check out repository
       uses: actions/checkout@v2
 
+    - name: Echo some variables
+      run: |
+        echo "${{ github.event }}"
+
     - name: PR and branch validation
       if: ${{ github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'development' }}
       run: |
