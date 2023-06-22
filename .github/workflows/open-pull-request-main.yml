@@ -19,13 +19,13 @@ jobs:
         echo "${GITHUB_EVENT}"
 
     - name: PR and branch validation
-      if: ${{ github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'development' }}
+      if: ${{ github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'development' }}
       run: |
         echo The PR was merged
     # Install dependencies or perform any necessary setup steps here
 
     - name: Open Pull Request
-      if: ${{ github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'development' }}
+      if: ${{ github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'development' }}
       uses: peter-evans/create-pull-request@v3
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
