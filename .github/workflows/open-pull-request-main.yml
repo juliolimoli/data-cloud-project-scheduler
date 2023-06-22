@@ -15,8 +15,9 @@ jobs:
     - name: Echo some variables
       env:
         GITHUB_EVENT: ${{ toJson(github.event) }}
+        GITHUB_REF: ${{ github.ref }}
       run: |
-        echo "${GITHUB_EVENT}"
+        echo "${GITHUB_EVENT} | ${GITHUB_REF}"
 
     - name: PR and branch validation
       if: ${{ github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'development' }}
@@ -29,7 +30,7 @@ jobs:
       uses: peter-evans/create-pull-request@v3
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        branch: ${{ github.ref }}
+        branch: 'development'
         title: "Merge feature development to main"
         body: |
           This pull request aims to merge the development branch into the main branch after the merge.
