@@ -2,6 +2,7 @@ import geopy.distance as gpd
 from datetime import datetime, timedelta
 import boto3
 import json
+import os
 
 def set_coordinates(event):
 
@@ -103,9 +104,9 @@ def create_schedule_rule(events_client, evt, radius):
                 )
     rule_name = "nearby_rule"+str(schedule_time)
     region = "sa-east-1"
-    acc_id = "820949372807"
+    ACC_ID = os.environ["AWS_ACCOUNT_ID"]
     function_name = "data-cloud-project-maps-nearby"
-    function_arn = f"arn:aws:lambda:{region}:{acc_id}:function:{function_name}"
+    function_arn = f"arn:aws:lambda:{region}:{ACC_ID}:function:{function_name}"
     datetime_object = datetime.strptime(evt[0], '%Y-%m-%d %H:%M:%S')
     minutes = str(datetime_object.minute).zfill(2)
     hour = str(datetime_object.hour).zfill(2)
