@@ -133,7 +133,7 @@ def create_schedule_rule(events_client, evt, radius):
         Target={
             "Arn": function_arn,
             "Input": event_for_nearby,
-            "RoleArn": f"arn:aws:iam::{acc_id}:role/service-role/{role_name}"
+            "RoleArn": f"arn:aws:iam::{ACC_ID}:role/service-role/{role_name}"
         }
     )
     return response
