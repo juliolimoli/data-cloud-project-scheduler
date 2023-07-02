@@ -114,10 +114,10 @@ def create_schedule_rule(events_client, evt, radius):
     month = str(datetime_object.month).zfill(2)
     year = str(datetime_object.year)
     cron_expression = f"at({year}-{month}-{day}T{hour}:{minutes}:00)"
-    event_for_nearby = {
+    event_for_nearby = json.dumps({
         "coordinate": evt[1],
         "radius": radius
-    }
+    })
     print(schedule_time, rule_name, cron_expression)
 
     # Create the rule with a one-time schedule
@@ -132,7 +132,7 @@ def create_schedule_rule(events_client, evt, radius):
         },
         Target={
             "Arn": function_arn,
-            "Input": event_for_nearby,
+            "Input": str(event_for_nearby),
             "RoleArn": f"arn:aws:iam::{ACC_ID}:role/service-role/{role_name}"
         }
     )
