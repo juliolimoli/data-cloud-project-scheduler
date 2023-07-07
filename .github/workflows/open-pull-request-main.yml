@@ -2,7 +2,7 @@ name: Open Pull Request development --> main
 on:
   pull_request:
     types:
-      - closed
+      - 'closed'
     branches: 
       - 'development'
 jobs:
@@ -17,16 +17,17 @@ jobs:
       run: |
         echo The PR was merged
 
-    - name: Create Pull Request
-      run: |
-        git config --global user.name "juliolimoli"
-        git config --global user.email "juliolimolisilva@gmail.com"
-        git checkout main
-        git merge --no-ff ${{ github.ref }}
-        git push origin main
+    #- name: Create Pull Request
+    #  if: ${{ github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'development' }}
+    #  run: |
+    #    git config --global user.name "juliolimoli"
+    #    git config --global user.email "juliolimolisilva@gmail.com"
+    #    git checkout main
+    #    git merge --no-ff ${{ github.ref }}
+    #    git push origin main
 
     - name: Open Pull Request
-      if: ${{ github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'development' }}
+      
       uses: peter-evans/create-pull-request@v3
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
