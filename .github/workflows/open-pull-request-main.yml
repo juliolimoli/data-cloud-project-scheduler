@@ -34,8 +34,8 @@ jobs:
         branch: main
         title: Merge development into main
         body: This pull request merges the development branch into the main branch.
-    # Install dependencies or perform any necessary setup steps here
-
+    # Install dependencies or perform any necessary setup steps here 
+        # again
     #- name: Open Pull Request
     #  
     #  uses: peter-evans/create-pull-request@v3
