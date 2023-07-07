@@ -9,32 +9,42 @@ jobs:
   open_pull_request:
     runs-on: ubuntu-latest
     steps:
-    - name: Check out repository
+    - name: Checkout repository
       uses: actions/checkout@v2
-
-    - name: Echo some variables
-      env:
-        GITHUB_REF: ${{ github.ref }}
-      run: |
-        echo "${GITHUB_REF}"
 
     - name: PR and branch validation
       if: ${{ github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'development' }}
       run: |
         echo The PR was merged
-    # Install dependencies or perform any necessary setup steps here
+
+    - name: Create Pull Request
+      run: |
+        git config --global user.name "juliolimoli"
+        git config --global user.email "juliolimolisilva@gmail.com"
+        git checkout main
+        git merge --no-ff ${{ github.ref }}
+        git push origin main
 
     - name: Open Pull Request
       if: ${{ github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'development' }}
       uses: peter-evans/create-pull-request@v3
       with:
-        token: ${{ secrets.ACTIONS_SECRET }}
-        branch: 'development'
-        title: "Merge feature development to main"
-        body: |
-          This pull request aims to merge the development branch into the main branch after the merge.
+        token: ${{ secrets.GITHUB_TOKEN }}
+        branch: main
+        title: Merge development into main
+        body: This pull request merges the development branch into the main branch.
+    # Install dependencies or perform any necessary setup steps here
 
-          Please review and merge if approved.
-        base: main
-        draft: false
+    #- name: Open Pull Request
+    #  
+    #  uses: peter-evans/create-pull-request@v3
+    #  with:
+    #    token: 
+    #    branch: 'development'
+    #    title: "Merge feature development to main"
+    #    body: |
+    #      This pull request aims to merge the development branch into the main branch after the merge.
+    #      Please review and merge if approved.
+    #    base: main
+    #    draft: false
       
