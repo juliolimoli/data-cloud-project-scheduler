@@ -115,6 +115,7 @@ def create_schedule_rule(events_client, evt, radius):
     year = str(datetime_object.year)
     cron_expression = f"at({year}-{month}-{day}T{hour}:{minutes}:00)"
     event_for_nearby = json.dumps({
+        "rule_name": rule_name,
         "coordinate": evt[1],
         "radius": radius
     })
@@ -138,7 +139,7 @@ def create_schedule_rule(events_client, evt, radius):
     )
     return response
 
-def lambda_handler(event, context):
+def lambda_handler(event):
     radius = float(event["radius"])
     event_bridge_client = boto3.client('scheduler')
     coordinates = set_coordinates(event)
